@@ -5,10 +5,12 @@ import { RadioButton, Button } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
 import VaccineCard from "../Components/VaccineCard";
 
+export const vacinas = [    
+]
+
 const VaccineList = (props) => {
     const navigation = useNavigation();
-    const vacinas = [    
-    ]
+    
 
     const goToNewVaccine = (props) => {
         navigation.navigate('NewVaccine', {itens: vacinas});
