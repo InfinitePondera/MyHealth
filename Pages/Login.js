@@ -20,10 +20,10 @@ const Login = (props) => {
     const goToVaccineList = () => {
         signInWithEmailAndPassword(auth, email, senha)
         .then((userCredential) => {
-            props.navigation.navigate('VaccineList', {props});
+            props.navigation.navigate('Root', {props});
         })
         .catch((error) => {
-            props.navigation.navigate('VaccineList', {props});
+            props.navigation.navigate('Root', {props});
         })
     }
 

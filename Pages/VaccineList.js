@@ -4,8 +4,32 @@ import { ScrollView } from "react-native-gesture-handler";
 import { RadioButton, Button } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
 import VaccineCard from "../Components/VaccineCard";
+import Header from "../Components/Header";
+
 
 export const vacinas = [    
+    {
+        vaccineTitle: "CoronaVac",
+        vaccineCount: "1a. dose",
+        vaccineDate: "01/21/2022",
+        nextVaccineDate: "07/21/2022",
+    },
+    {
+        vaccineTitle: "Pfizer Covid-19",
+        vaccineCount: "1a. dose",
+        vaccineDate: "03/25/2022",
+        nextVaccineDate: "08/13/2022",
+    },
+    {
+        vaccineTitle: "J&J Covid-19",
+        vaccineCount: "Dose unica",
+        vaccineDate: "12/25/2021",
+    },
+    {
+        vaccineTitle: "Soro de Supersoldado",
+        vaccineCount: "Dose unica",
+        vaccineDate: "03/01/1945",
+    },
 ]
 
 const VaccineList = (props) => {
@@ -18,12 +42,7 @@ const VaccineList = (props) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.headerContainer}>
-                <View style={styles.logo}>
-                    <Image style={styles.imageLogo} source={require('../Assets/2770407.png')} />
-                    <Text style={{ color: 'rgb(65, 158, 215)', fontSize: 30, fontWeight: 'bold' }}>MyHealth</Text>
-                </View>
-            </View>
+            <Header />
             <FlatList
                 style={styles.background}
                 data={vacinas} numColumns={2}
@@ -39,19 +58,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
+        backgroundColor: '#ADD5D0',
     },
     background: {
         width: '100%',
         height: '100%',
 
     },
-    headerContainer: {
-        height: '7%',
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
-        backgroundColor: 'rgb(193, 231, 227)',
-    },
+    
     introText: {
         justifyContent: 'center',
         alignItems: 'flex-start',
@@ -62,12 +76,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start',
     },
-    logo: {
-        justifyContent: 'center',
-        flexDirection: 'row',
-        marginTop: 5,
-        marginLeft: 15,
-    },
+    
     backgroundContainer: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -75,10 +84,7 @@ const styles = StyleSheet.create({
         height: '100%',
         backgroundColor: "rgba(170, 178, 177, 0.80)",
     },
-    imageLogo: {
-        width: 35,
-        height: 35,
-    },
+    
     loginButtons: {
         flexDirection: 'column',
         justifyContent: 'space-around',

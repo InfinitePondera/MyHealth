@@ -1,11 +1,14 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, ImageBackground, TextInput, Button, Dimensions } from 'react-native';
 import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const VaccineCard = (props) => {
+    const navigation = useNavigation();
     const { item } = props.item;
+
     const goToEdit = (props) => {
-        props.navigation.navigate('EditVaccineCard', { item });
+        navigation.navigate('EditVaccine', { item });
     }
 
     return (
@@ -34,6 +37,8 @@ const styles = StyleSheet.create({
         width: (Dimensions.get('window').width / 2) - 10,
         marginVertical: 5,
         marginHorizontal: 5,
+        borderWidth: 1,
+        borderColor: 'black',
     },
 });
 

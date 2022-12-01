@@ -15,6 +15,7 @@
     "@react-navigation/native-stack": "^6.9.1",
     "firebase": "^9.12.1",
     "react": "18.1.0",
+    "react-icons": "^4.7.1",
     "react-native": "0.70.3",
     "react-native-date-picker": "^4.2.5",
     "react-native-gesture-handler": "^2.7.1",
@@ -23,6 +24,7 @@
     "react-native-reanimated": "^2.11.0",
     "react-native-safe-area-context": "^4.4.1",
     "react-native-screens": "^3.18.2",
+    "react-native-svg": "^13.6.0",
     "react-native-vector-icons": "^9.2.0",
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4"
@@ -35,6 +37,7 @@
     "eslint": "^7.32.0",
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "0.72.3",
+    "react-native-svg-transformer": "^1.0.0",
     "react-test-renderer": "18.1.0"
   },
   "jest": {
