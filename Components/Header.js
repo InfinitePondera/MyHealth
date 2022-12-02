@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native';
-import { RadioButton, Button, TextInput } from 'react-native-paper';
-import { Svg, Circle } from 'react-native-svg';
-import SVGImg from '../Assets/Hamburger_icon.svg';
-import AjudaExu from './ajudaexupf'
+import { View, Text, StyleSheet, Image, ImageBackground, Touchable } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
 const Header = (props) => {
+
+    const openDrawer = () => {
+        props.navigation.toggleDrawer();
+    }
+
     return (
         <View style={styles.headerContainer}>
             <View style={styles.logo}>
-                <AjudaExu/>
-                <Image style={styles.imageLogo} source={require('../Assets/2770407.png')} />
-                <Text style={{ color: 'rgb(65, 158, 215)', fontSize: 30, fontWeight: 'bold' }}>MyHealth</Text>
+                <TouchableOpacity onPress={openDrawer}>
+                    <Image style={{width: 40, height: 40, opacity: 0.2}} source={require('../Assets/menuLogo.png')} resizeMode='contain' />
+                </TouchableOpacity>
+                <Text style={{display: 'flex', flexDirection:'column', alignSelf: 'center', color: 'rgb(65, 158, 215)', fontSize: 25, fontWeight: 'bold', marginLeft: 5 }}>{props.header}</Text>
             </View>
         </View>
     )

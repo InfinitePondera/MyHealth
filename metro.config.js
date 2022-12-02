@@ -5,7 +5,7 @@
  * @format
  */
 
-/*module.exports = {
+module.exports = {
   transformer: {
     getTransformOptions: async () => ({
       transform: {
@@ -15,8 +15,8 @@
     }),
   },
 };
-*/
-const { getDefaultConfig } = require("metro-config");
+
+/*const { getDefaultConfig } = require("metro-config");
 
 module.exports = (async () => {
   const {
@@ -33,4 +33,4 @@ module.exports = (async () => {
       sourceExts: [...sourceExts, "svg"]
     }
   };
-})();
+})();*/

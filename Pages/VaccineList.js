@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, ImageBackground, TextInput, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Image, ImageBackground, FlatList } from 'react-native';
 import { ScrollView } from "react-native-gesture-handler";
-import { RadioButton, Button } from 'react-native-paper';
+import { RadioButton, Button, TextInput } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
 import VaccineCard from "../Components/VaccineCard";
 import Header from "../Components/Header";
@@ -42,14 +42,19 @@ const VaccineList = (props) => {
 
     return (
         <View style={styles.container}>
-            <Header />
+            <Header navigation={navigation} header='Lista de Vacinas' />
+            <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <TextInput left={<TextInput.Icon disabled icon="magnify" />} style={styles.searchBox} placeholder="Pesquise..."></TextInput>
+            </View>
             <FlatList
                 style={styles.background}
                 data={vacinas} numColumns={2}
                 renderItem={(item) => <VaccineCard item={item} />}
-                ListFooterComponent={<Button onPress={goToNewVaccine} mode="outlined">Cadastrar nova vacina</Button>}
             />
-
+            <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <Button style={styles.registerButton} textColor='#EAEAEA' onPress={goToNewVaccine} mode="outlined">Cadastrar nova vacina</Button>
+            </View>
+            
         </View>
     )
 }
@@ -65,35 +70,24 @@ const styles = StyleSheet.create({
         height: '100%',
 
     },
-    
-    introText: {
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        marginHorizontal: 10,
+    registerButton: {
+        width: 210,
+        height: 50,
+        backgroundColor: '#49B976',
+        borderWidth: 1,
+        borderColor: '#37BD6D',
         marginBottom: 50,
     },
-    scrollBackground: {
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-    },
-    
-    backgroundContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100%',
-        backgroundColor: "rgba(170, 178, 177, 0.80)",
-    },
-    
-    loginButtons: {
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        marginTop: 20,
-        marginHorizontal: 10,
-        height: '40%',
-
-    },
+    searchBox: {
+        borderWidth: 1,
+        borderColor: 'gray',
+        marginVertical: 10,
+        backgroundColor: 'white',
+        padding: 1,
+        paddingHorizontal: 3,
+        width: 350,
+        height: 25,
+    }
 });
 
 export default VaccineList;

@@ -13,7 +13,7 @@ const VaccineCard = (props) => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={goToEdit}>
+            <TouchableOpacity style={{backgroundColor: 'rgb(255, 255, 255)', }} onPress={goToEdit}>
                 <Text style={{ color: 'rgb(63, 146, 197)' }}>{item.vaccineTitle}</Text>
                 <Text style={{ color: 'white', backgroundColor: 'rgb(63, 146, 197)' }}>{item.vaccineCount}</Text>
                 <Text style={{ color: 'rgb(183, 183, 183)' }}>{item.vaccineDate}</Text>
@@ -33,12 +33,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
+        backgroundColor: 'rgb(255, 255, 255)',
         alignItems: 'center',
         width: (Dimensions.get('window').width / 2) - 10,
         marginVertical: 5,
         marginHorizontal: 5,
-        borderWidth: 1,
-        borderColor: 'black',
+        borderRadius: 7,
     },
 });
 
