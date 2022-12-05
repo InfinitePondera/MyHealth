@@ -1,32 +1,43 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, ImageBackground, FlatList } from 'react-native';
-import { ScrollView } from "react-native-gesture-handler";
 import { RadioButton, Button, TextInput } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
-import VaccineCard from "../Components/VaccineCard";
 import Header from "../Components/Header";
+import NextVaccineComponent from "../Components/NextVaccineComponent";
 
-
-export const vacinas = [ 
+export const proxVacinas = [    
+    {
+        vaccineName: "CoronaVac",
+        vaccineDate: "01/21/2022",
+    },
+    {
+        vaccineName: "CoronaVac",
+        vaccineDate: "01/21/2022",
+    },
+    {
+        vaccineName: "CoronaVac",
+        vaccineDate: "01/21/2022",
+    },
+    {
+        vaccineName: "CoronaVac",
+        vaccineDate: "01/21/2022",
+    },
 ]
 
-const VaccineList = (props) => {
+const NextVaccines = (props) => {
     const navigation = useNavigation();
-    
+
     const goToNewVaccine = (props) => {
-        navigation.navigate('NewVaccine', {itens: vacinas});
+        navigation.navigate('NewVaccine');
     }
 
     return (
         <View style={styles.container}>
-            <Header navigation={navigation} header='Lista de Vacinas' />
-            <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                <TextInput left={<TextInput.Icon disabled icon="magnify" />} style={styles.searchBox} placeholder="Pesquise..."></TextInput>
-            </View>
+            <Header navigation={props.navigation} header='Próximas Vacinas' />
             <FlatList
                 style={styles.background}
-                data={vacinas} numColumns={2}
-                renderItem={(item) => <VaccineCard item={item} />}
+                data={proxVacinas} numColumns={1}
+                renderItem={(item) => <NextVaccineComponent nextVaccineData={item} />}
             />
             <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                 <Button style={styles.registerButton} textColor='#EAEAEA' onPress={goToNewVaccine} mode="outlined">Cadastrar nova vacina</Button>
@@ -45,7 +56,8 @@ const styles = StyleSheet.create({
     background: {
         width: '100%',
         height: '100%',
-
+        marginTop: 15,
+        marginLeft: 10,
     },
     registerButton: {
         width: 210,
@@ -67,4 +79,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default VaccineList;
+export default NextVaccines;

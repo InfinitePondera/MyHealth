@@ -1,13 +1,22 @@
+import { sendPasswordResetEmail } from 'firebase/auth';
 import React from 'react';
 import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native';
 import { RadioButton, Button, TextInput } from 'react-native-paper';
-import { sendPasswordResetEmail } from 'firebase/auth'
+
 import auth from '../config/firebase'
 
 const RecoverPassword = (props) => {
     const [email, setEmail] = React.useState("");
     const recoverPassword = (s) => {
-        
+        sendPasswordResetEmail(auth, email)
+        .then(() => {
+            console.log("email reset enviado");
+            setEmail("");
+            props.navigation.pop();
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     }
 
     return (

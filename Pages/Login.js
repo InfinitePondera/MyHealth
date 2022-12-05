@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, ImageBackground, TextInput, Button } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import auth from '../config/firebase'
+import { useDispatch } from 'react-redux';
+import { reducerSetLogin } from '../redux/loginSlice';
+import { auth } from '../config/firebase';
 
 const Login = (props) => {
 
@@ -9,21 +11,25 @@ const Login = (props) => {
     const [senha, setSenha] = React.useState("");
     const [senhaIncorreta, setSenhaIncorreta] = React.useState(false);
 
+    const dispatch = useDispatch();
+
     const goToCreateAccount = () => {
-        props.navigation.navigate('CreateAccount');
+        props.navigation.navigate('CreateAccount', {props});
     }
 
     const goToRecoverPassword = () => {
-        props.navigation.navigate('RecoverPassword');
+        props.navigation.navigate('RecoverPassword', {props});
     }
 
-    const goToVaccineList = () => {
-        signInWithEmailAndPassword(auth, email, senha)
+    const goToVaccineList = (e, s) => {
+        signInWithEmailAndPassword(auth, e, s)
         .then((userCredential) => {
+            console.log("user logado com sucesso")
+            dispatch(reducerSetLogin({uid: userCredential.user.uid}))
             props.navigation.navigate('Root', {props});
         })
         .catch((error) => {
-            props.navigation.navigate('Root', {props});
+            console.log("erro ao logar user" + error);
         })
     }
 
@@ -42,11 +48,11 @@ const Login = (props) => {
                         <View style={styles.loginInputs}>
                             <View style={styles.inputText}>
                                 <Text style={{ color: 'white', fontSize: 20, width: '15%', marginRight: 2, flexGrow: 2 }}>Email </Text>
-                                <TextInput style={{backgroundColor: 'white', width: '85%', height: 35, borderRadius: 2}} value={email} onChange={setEmail}></TextInput>
+                                <TextInput style={{backgroundColor: 'white', width: '85%', height: 35, borderRadius: 2}} value={email} onChangeText={text => setEmail(text)}></TextInput>
                             </View>
                             <View style={styles.inputText}>
                                 <Text style={{ color: 'white', fontSize: 20, width: '15%', marginRight: 2, flexGrow: 2 }}>Senha </Text>
-                                <TextInput secureTextEntry={true} style={{backgroundColor: 'white', width: '85%', height: 35, borderRadius: 2}} value={senha} onChange={setSenha}></TextInput>
+                                <TextInput secureTextEntry={true} style={{backgroundColor: 'white', width: '85%', height: 35, borderRadius: 2}} value={senha} onChangeText={text => setSenha(text)}></TextInput>
                                 
                             </View>
                             { senhaIncorreta &&
@@ -58,7 +64,7 @@ const Login = (props) => {
                         </View>
                         <View style={styles.loginButtons}>
                             <View >
-                                <Button onPress={goToVaccineList} color="rgb(73, 185, 118)" title='Entrar'></Button>
+                                <Button onPress={goToVaccineList(email, senha)} color="rgb(73, 185, 118)" title='Entrar'></Button>
                             </View>
                             <View >
                                 <Button onPress={goToCreateAccount} title='Criar minha Conta'></Button>
