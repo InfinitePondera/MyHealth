@@ -14,11 +14,14 @@ const VaccineCard = (props) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={{backgroundColor: 'rgb(255, 255, 255)'}} onPress={goToEdit}>
-                <Text style={{ color: 'rgb(63, 146, 197)' }}>{item.vaccineTitle}</Text>
-                <Text style={{ color: 'white', backgroundColor: 'rgb(63, 146, 197)' }}>{item.vaccineCount}</Text>
-                <Text style={{ color: 'rgb(183, 183, 183)' }}>{item.vaccineDate}</Text>
+                <Text style={{ color: 'rgb(63, 146, 197)' }}>{item.vacina}</Text>
+                <Text style={{ color: 'white', backgroundColor: 'rgb(63, 146, 197)' }}>{item.dose}</Text>
+                <Text style={{ color: 'rgb(183, 183, 183)' }}>{item.dataVacina}</Text>
+                { item.comprovante ??
+                    <Image source={{uri: item.comprovante}} style={{width: 150, height: 100}} />
+                }
                 {item.nextVaccineDate != undefined &&
-                    <Text style={{ color: 'rgb(253, 162, 162)' }}>Próxima dose em: {item.nextVaccineDate}</Text>
+                    <Text style={{ color: 'rgb(253, 162, 162)' }}>Próxima dose em: {item.dataProxVacina}</Text>
                 }
                 {item.nextVaccineDate === undefined &&
                     <Text style={{ color: 'rgb(253, 162, 162)' }}>Não há próxima dose</Text>

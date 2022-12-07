@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, ImageBackground, TouchableOpacity, TextInput } from 'react-native';
-import { RadioButton, Button } from 'react-native-paper';
+import { View, Text, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { RadioButton, Button, TextInput } from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { db } from '../config/firebase';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import { useSelector } from 'react-redux';
 
 const NewVaccine = (props) => {
     const [vacina, setVacina] = React.useState("");
@@ -13,17 +14,23 @@ const NewVaccine = (props) => {
     const [doseSelecionada, setDoseSelecionada] = React.useState('1a. dose');
     const [pickerDoseOpen, setPickerDoseOpen] = React.useState(false);
     const [pickerNextOpen, setPickerNextOpen] = React.useState(false);
+    const uid = useSelector((state) => state.login.uid);
+    const docId = useSelector((state) => state.vacina.idVacina);
     const [uri, setUri] = useState('')
 
     const openImagePicker = () => {
         launchImageLibrary({ mediaType: 'photo' }, (response) => {
-            setUri(response.assets[0].uri)
-            console.log(uri)
+            setUri(response.assets[0].uri);
+            console.log(uri);
+        })
+        .catch(error => {
+            console.log(error);
         })
     }
 
-    const register = (v, dv, dpv, ds, img) => {
+    const register = (uid, v, dv, dpv, ds, img) => {
         addDoc(collection(db, "vacinas"), {
+            user: uid,
             dataVacina: dv,
             vacina: v,
             dataProxVacina: dpv,
@@ -31,8 +38,34 @@ const NewVaccine = (props) => {
             comprovante: img
         })
         .then((result) => {
-            console.log();
+            console.log(result.id);
             props.navigation.pop();
+        })
+    }
+
+    const updateVac = (id, v, dv, dpv, ds, img) => {
+        updateDoc(doc(db, "vacinas", id), {
+            dataVacina: dv,
+            vacina: v,
+            dataProxVacina: dpv,
+            dose: ds,
+            comprovante: img
+        })
+        .then((result) => {
+            props.navigation.pop();
+        })
+        .catch((error) => {
+            alert(error);
+        })
+    }
+
+    const deleteVac = (id) => {
+        deleteDoc(doc(db, "vacinas", id))
+        .then(() => {
+            props.navigation.pop();
+        })
+        .catch((error) => {
+            alert(error);
         })
     }
 
@@ -65,12 +98,12 @@ const NewVaccine = (props) => {
                 </View>
                 <View style={styles.wrapper}>
                     <Text style={{marginRight: 10, color: '#EAEAEA'}}>Vacina</Text>
-                    <TextInput value={vacina} onChangeText={text => setVacina(text)}  style={{ backgroundColor: 'rgb(242, 240, 244)', width: 201, height: 28, fontSize: 16, paddingVertical: 1 }}></TextInput>
+                    <TextInput value={vacina} onChangeText={text => setVacina(text)}  style={{ backgroundColor: 'rgb(242, 240, 244)', width: 201, height: 28, fontSize: 16, paddingVertical: 1 }} />
                 </View>
                 <View style={styles.wrapper}>
                     <Text style={{ color: '#EAEAEA', marginRight: 10, alignSelf: 'center' }}>Dose</Text>
                     <RadioButton.Group onValueChange={newValue => setDoseSelecionada(newValue)} value={doseSelecionada}>
-                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+                        <View style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'center', marginLeft: 50 }}>
                             <Text style={{ color: '#EAEAEA' }}>1a. Dose</Text>
                             <RadioButton value="1a. Dose" />
                             <Text style={{ color: '#EAEAEA' }}>2a. Dose</Text>
@@ -81,7 +114,16 @@ const NewVaccine = (props) => {
                             <RadioButton value="Dose Unica" />
                         </View>
                     </RadioButton.Group>
-                </View> 
+                </View>
+                <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+                    <Text style={{marginRight: 10, color: '#EAEAEA'}}>Comprovante</Text>
+                        <Button title="Picker" onPress={() => openImagePicker()} textColor='#EAEAEA' style={{ marginBottom: 64, width: 188, height: 25, backgroundColor: '#49B976', borderWidth: 1, borderColor: '#37BD6D' }}>Clique aqui para escolher uma imagem...</Button>
+                        {uri ?
+                            <Image source={{uri: uri}} style={{width: 300, height: 100}} />
+                            :
+                            null
+                        }
+                </View>
                 <View style={styles.wrapper}>
                     <Text style={{ color: '#EAEAEA', marginRight: 10 }}>Próxima Vacinação</Text>
                     <TextInput value={dataProxVacina.toLocaleDateString('pt-BR')} style={{ backgroundColor: 'rgb(242, 240, 244)', width: 201, height: 28, fontSize: 16, padding: 1 }} right={<TextInput.Icon onPress={() => { setPickerNextOpen(true) }} icon="calendar" />} />
@@ -101,10 +143,22 @@ const NewVaccine = (props) => {
                     />
                 </View>
             </View>
-
-            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                <Button title="Submit" onPress={() => register(enteredName, email, senha, senhaRepeat)} textColor='#EAEAEA' style={{ marginBottom: 64, width: 188, height: 50, backgroundColor: '#49B976', borderWidth: 1, borderColor: '#37BD6D' }}>Cadastrar</Button>
-            </View>
+            
+            { props.isEdit ?
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                    <Button title="Submit" onPress={() => updateVac(docId, vacina, dataVacina, dataProxVacina, doseSelecionada, uri)} textColor='#EAEAEA' style={{ marginBottom: 64, width: 188, height: 50, backgroundColor: '#49B976', borderWidth: 1, borderColor: '#37BD6D' }}>Atualizar</Button>
+                </View>
+                :
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                    <Button title="Submit" onPress={() => register(uid, vacina, dataVacina, dataProxVacina, doseSelecionada, uri)} textColor='#EAEAEA' style={{ marginBottom: 64, width: 188, height: 50, backgroundColor: '#49B976', borderWidth: 1, borderColor: '#37BD6D' }}>Cadastrar</Button>
+                </View>
+            }
+            { props.isEdit ??
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                    <Button title="Submit" onPress={() => deleteVac(docId)} textColor='#EAEAEA' style={{ marginBottom: 64, width: 188, height: 50, backgroundColor: 'rgb(253, 121, 121)', borderWidth: 1, borderColor: '#37BD6D' }}>Deletar</Button>
+                </View>
+            }
+            
         </View>
     )
 }
@@ -141,6 +195,12 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         marginTop: 15,
 
+    },
+    imagePickerWrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        marginTop: 15
     },
     buttonWrapper: {
         display: 'flex',

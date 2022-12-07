@@ -64,13 +64,13 @@ const Login = (props) => {
                         </View>
                         <View style={styles.loginButtons}>
                             <View >
-                                <Button onPress={goToVaccineList(email, senha)} color="rgb(73, 185, 118)" title='Entrar'></Button>
+                                <Button onPress={() => goToVaccineList(email, senha)} color="rgb(73, 185, 118)" title='Entrar'></Button>
                             </View>
                             <View >
-                                <Button onPress={goToCreateAccount} title='Criar minha Conta'></Button>
+                                <Button onPress={() => goToCreateAccount} title='Criar minha Conta'></Button>
                             </View>
                             <View >
-                                <Button onPress={goToRecoverPassword} color="rgb(181, 199, 209)" title='Esqueci minha Senha'></Button>
+                                <Button onPress={() => goToRecoverPassword} color="rgb(181, 199, 209)" title='Esqueci minha Senha'></Button>
                             </View>
                         </View>
                     </View>

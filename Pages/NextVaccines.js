@@ -2,46 +2,44 @@ import React from "react";
 import { View, Text, StyleSheet, Image, ImageBackground, FlatList } from 'react-native';
 import { RadioButton, Button, TextInput } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
+import { collection, query, onSnapshot } from "firebase/firestore";
+import { db } from '../config/firebase';
+import { useSelector } from "react-redux";
 import Header from "../Components/Header";
 import NextVaccineComponent from "../Components/NextVaccineComponent";
 
-export const proxVacinas = [    
-    {
-        vaccineName: "CoronaVac",
-        vaccineDate: "01/21/2022",
-    },
-    {
-        vaccineName: "CoronaVac",
-        vaccineDate: "01/21/2022",
-    },
-    {
-        vaccineName: "CoronaVac",
-        vaccineDate: "01/21/2022",
-    },
-    {
-        vaccineName: "CoronaVac",
-        vaccineDate: "01/21/2022",
-    },
-]
-
 const NextVaccines = (props) => {
-    const navigation = useNavigation();
 
-    const goToNewVaccine = (props) => {
-        navigation.navigate('NewVaccine');
-    }
+    const [proxVacinas, setProxVacinas] = useState([]);
+    const uid = useSelector((state) => state.login.uid);
+    const q = query(collection(db, "vacinas"))
+
+    useEffect(() => {
+        onSnapshot(q, (result) => {
+            const listaVacinas = []
+            result.forEach((doc) => {
+                listaVacinas.push({
+                    id: doc.id,
+                    user: doc.data().uid,
+                    dataVacina: doc.data().dataVacina,
+                    vacina: doc.data().vacina,
+                    dataProxVacina: doc.data().dataProxVacina,
+                    dose: doc.data().dose,
+                    comprovante: doc.data().comprovante,
+                })
+            })
+            setProxVacinas(listaVacinas);
+        })    
+    }, [uid])
 
     return (
         <View style={styles.container}>
             <Header navigation={props.navigation} header='Próximas Vacinas' />
             <FlatList
                 style={styles.background}
-                data={proxVacinas} numColumns={1}
+                data={proxVacinas.filter((vacina) => vacina.dataProxVacina)} numColumns={1}
                 renderItem={(item) => <NextVaccineComponent nextVaccineData={item} />}
             />
-            <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                <Button style={styles.registerButton} textColor='#EAEAEA' onPress={goToNewVaccine} mode="outlined">Cadastrar nova vacina</Button>
-            </View>
             
         </View>
     )

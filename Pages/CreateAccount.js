@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native';
 import { RadioButton, Button, TextInput } from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../config/firebase';
+import { auth, db } from '../config/firebase';
+import { addDoc, collection } from 'firebase/firestore';
 
 const CreateAccount = (props) => {
     const [enteredName, setEnteredName] = useState(''); //INIT TO EMPTY
@@ -15,21 +16,32 @@ const CreateAccount = (props) => {
     const [senhaRepeat, setSenhaRepeat] = React.useState('');
     const [senhaInvalida, setSenhaInvalida] = React.useState(false);
 
-    const register = (e, s, r) =>{
+    const register = (e, s, r, name, sexo, dataNasc) =>{
         if (s != r) {
             setSenhaInvalida(true)
         }
         else {
             createUserWithEmailAndPassword(auth, e, s)
             .then(() => {
-                console.log("Usuario cadastrado com sucesso");
-                setEnteredName("");
-                setSexo('Masculino');
-                setDataNascimento('');
-                setEmail("");
-                setSenha("");
-                setSenhaRepeat("");
-                props.navigation.pop();
+                addDoc(collection(db, "contas"), {
+                    email: e,
+                    nome: name,
+                    sexo: sexo,
+                    dataNascimento: dataNasc,
+                })
+                .then((result) => {
+                    console.log("Usuario cadastrado com sucesso");
+                    setEnteredName("");
+                    setSexo('Masculino');
+                    setDataNascimento('');
+                    setEmail("");
+                    setSenha("");
+                    setSenhaRepeat("");
+                    props.navigation.pop();
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
             })
             .catch((error) => {
                 console.log(error);
@@ -95,7 +107,7 @@ const CreateAccount = (props) => {
             </View>
             
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
-                <Button title="Submit" onPress={() => register(email, senha, senhaRepeat)} textColor='#EAEAEA' style={{marginBottom: 64, width: 188, height: 50, backgroundColor: '#49B976', borderWidth: 1, borderColor: '#37BD6D'}}>Cadastrar</Button>
+                <Button title="Submit" onPress={() => register(email, senha, senhaRepeat, enteredName, sexo, dataNascimento)} textColor='#EAEAEA' style={{marginBottom: 64, width: 188, height: 50, backgroundColor: '#49B976', borderWidth: 1, borderColor: '#37BD6D'}}>Cadastrar</Button>
             </View>
         </View>
     )
