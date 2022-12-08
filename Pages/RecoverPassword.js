@@ -3,12 +3,12 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native';
 import { RadioButton, Button, TextInput } from 'react-native-paper';
 
-import auth from '../config/firebase'
+import { auth } from '../config/firebase'
 
 const RecoverPassword = (props) => {
     const [email, setEmail] = React.useState("");
-    const recoverPassword = (s) => {
-        sendPasswordResetEmail(auth, email)
+    const recoverPassword = (e) => {
+        sendPasswordResetEmail(auth, e)
         .then(() => {
             console.log("email reset enviado");
             setEmail("");

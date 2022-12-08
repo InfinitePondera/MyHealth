@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, ImageBackground, FlatList } from 'react-native';
 import { RadioButton, Button, TextInput } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
@@ -37,7 +37,7 @@ const NextVaccines = (props) => {
             <Header navigation={props.navigation} header='Próximas Vacinas' />
             <FlatList
                 style={styles.background}
-                data={proxVacinas.filter((vacina) => vacina.dataProxVacina)} numColumns={1}
+                data={proxVacinas} numColumns={1}
                 renderItem={(item) => <NextVaccineComponent nextVaccineData={item} />}
             />
             

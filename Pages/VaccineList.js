@@ -7,7 +7,8 @@ import VaccineCard from "../Components/VaccineCard";
 import Header from "../Components/Header";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from '../config/firebase';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { reducerSetVacina } from "../redux/vacinaSlice";
 
 const VaccineList = (props) => {
     const navigation = useNavigation();
@@ -15,6 +16,7 @@ const VaccineList = (props) => {
     const [searchString, setSearchString] = useState('');
     const uid = useSelector((state) => state.login.uid);
     const q = query(collection(db, "vacinas"))
+    const dispatch = useDispatch();
 
     useEffect(() => {
         onSnapshot(q, (result) => {
@@ -34,8 +36,9 @@ const VaccineList = (props) => {
         })    
     }, [uid])
     
-    const goToNewVaccine = (props) => {
-        navigation.navigate('NewVaccine', {itens: vacinas});
+    const goToNewVaccine = () => {
+        dispatch(reducerSetVacina({idVacina: undefined}))
+        navigation.navigate('NewVaccine');
     }
 
     return (
@@ -46,11 +49,11 @@ const VaccineList = (props) => {
             </View>
             <FlatList
                 style={styles.background}
-                data={vacinas.filter((vacina) => vacina.nome.includes(searchString))} numColumns={2}
+                data={vacinas} numColumns={2}
                 renderItem={(item) => <VaccineCard item={item} />}
             />
             <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                <Button style={styles.registerButton} textColor='#EAEAEA' onPress={() => goToNewVaccine} mode="outlined">Cadastrar nova vacina</Button>
+                <Button style={styles.registerButton} textColor='#EAEAEA' onPress={goToNewVaccine} mode="outlined">Cadastrar nova vacina</Button>
             </View>
             
         </View>

@@ -9,8 +9,8 @@ const NextVaccineComponent = (props) => {
     return (
         <View style={styles.container}>
             <View style={{ backgroundColor: 'rgb(255, 255, 255)' }}>
-                <Text style={{ color: 'rgb(63, 146, 197)', fontSize: 20, marginLeft: 10 }}>{item.vaccineName}</Text>
-                <Text style={{ color: 'rgb(139, 139, 139)', fontSize: 20, marginLeft: 10 }}>{item.vaccineDate}</Text>
+                <Text style={{ color: 'rgb(63, 146, 197)', fontSize: 20, marginLeft: 10 }}>{item.vacina}</Text>
+                <Text style={{ color: 'rgb(139, 139, 139)', fontSize: 20, marginLeft: 10 }}>{new Date(item.dataVacina).toLocaleDateString('pt-BR')}</Text>
             </View>
         </View>
     )

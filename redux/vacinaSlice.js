@@ -8,14 +8,12 @@ export const vacinaSlice = createSlice({
     name: 'vacina',
     initialState: initialValues,
     reducers: {
-        reducers: {
-            reducerSetVacina: (state, action) => {
-                state.idVacina = action.payload.idVacina;
-            }
+        reducerSetVacina: (state, action) => {
+            state.idVacina = action.payload.idVacina;
         }
     }
 })
 
-export const {reducerSetVacina} = vacinaSlice.actions;
+export const { reducerSetVacina } = vacinaSlice.actions;
 
 export default vacinaSlice.reducer;
